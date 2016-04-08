@@ -5,25 +5,20 @@ import org.testng.Assert;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.Scanner;
 
-/**
- * Created by Sangwook on 2016-04-06.
- */
 public class SolutionTest {
+    private FileInputStream istream;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private Scanner isc;
     private Path outputFilePath;
     PrintStream original = System.out;
+    long elapsedTime;
 
     private final String INPUT_FILE_PATH = "src/ehwaz/problem_solving/template/input.txt";
     private final String OUTPUT_FILE_PATH = "src/ehwaz/problem_solving/template/output.txt";
 
     @BeforeTest
     public void setUp() throws Exception {
-
-        File inputFile = new File(INPUT_FILE_PATH);
-        isc = new Scanner(inputFile);
+        istream = new FileInputStream(INPUT_FILE_PATH);
 
         outputFilePath = Paths.get(OUTPUT_FILE_PATH);
         System.setOut(new PrintStream(outContent));
@@ -34,16 +29,22 @@ public class SolutionTest {
         // Tears down the fixture, for example, close a network connection.
         // This method is called after a test is executed.
         // Asserting in tearDown() is generally a bad idea.
-
         System.setOut(original);
+        istream.close();
 
-        isc.close();
+        // Print after stdout is restored.
+        System.out.println("\nSolution took " + Long.toString(elapsedTime)  + "ms to run.");
     }
 
     @Test
     public void testSolveProb() throws Exception {
+        long startTime, stopTime;
+        startTime = System.currentTimeMillis();
 
-        Solution.solveProb(isc);
+        Solution.solveProb(istream);
+
+        stopTime = System.currentTimeMillis();
+        elapsedTime = stopTime - startTime;
 
         String answer = new String(Files.readAllBytes(outputFilePath)).trim();
         String result = outContent.toString().trim();
