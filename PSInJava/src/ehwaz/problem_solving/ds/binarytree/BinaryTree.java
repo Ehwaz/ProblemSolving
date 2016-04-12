@@ -2,7 +2,6 @@ package ehwaz.problem_solving.ds.binarytree;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.codehaus.groovy.ast.expr.BinaryExpression;
 
 import java.util.*;
 
