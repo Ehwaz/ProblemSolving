@@ -64,6 +64,7 @@ public class DijkstraAlgorithm {
         }
     }
 
+    // TODO: Add a testcase for this method.
     public LinkedList<Vertex> getMinimalPath(Vertex dst) {
         if (isExecutionDone == false) {
             throw new RuntimeException("DijkstraAlgorithm.getMinimalPath(): run after execute() is completed.");
