@@ -13,6 +13,7 @@ public class Solution {
         Scanner sc = new Scanner(istream);
         int testNum = Integer.parseInt(sc.nextLine());
 
+        System.out.println("TotalNum: " + (testNum * (testNum+1)/2));
         for (int testCnt = 0; testCnt < testNum; testCnt++) {
             int nTimes = Integer.parseInt(sc.nextLine());
 

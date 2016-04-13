@@ -5,52 +5,65 @@ import org.testng.Assert;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.function.Consumer;
 
 public class SolutionTest {
+
+    ///////////// Test-specific codes: you only need to modify these lines. /////////////////
+    Consumer<InputStream> SOLUTION_TO_TEST = istream -> Solution.solveProb(istream);    // Requires Java 8
+    private final int numOfTestCases = 2;
+    private final String[] INPUT_FILE_PATHS = {
+            "src/ehwaz/problem_solving/template/input1.txt",
+            "src/ehwaz/problem_solving/template/input2.txt"
+    };
+    private final String[] OUTPUT_FILE_PATHS = {
+            "src/ehwaz/problem_solving/template/output1.txt",
+            "src/ehwaz/problem_solving/template/output2.txt"
+    };
+
+    @Test private void runTestCase1() throws Exception {   runTest(0, SOLUTION_TO_TEST);   }
+    @Test private void runTestCase2() throws Exception {   runTest(1, SOLUTION_TO_TEST);   }
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+
     private FileInputStream istream;
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private ByteArrayOutputStream outContent;
     private Path outputFilePath;
+    private long[] runningTimes = new long[numOfTestCases];
     PrintStream original = System.out;
-    long elapsedTime;
 
-    private final String INPUT_FILE_PATH = "src/ehwaz/problem_solving/template/input.txt";
-    private final String OUTPUT_FILE_PATH = "src/ehwaz/problem_solving/template/output.txt";
-
-    @BeforeTest
-    public void setUp() throws Exception {
-        istream = new FileInputStream(INPUT_FILE_PATH);
-
-        outputFilePath = Paths.get(OUTPUT_FILE_PATH);
-        System.setOut(new PrintStream(outContent));
+    @AfterClass
+    // The annotated method will be run after all the test methods in the current class have been run.
+    public void printRunningTimes() {
+        // Print after stdout is restored. During tests, stdout is directed to ByteArrayOutputStream.
+        for (int i = 0; i < numOfTestCases; i++) {
+            System.out.println("Test case #" + (i+1) + " took " + Long.toString(runningTimes[i])  + "ms to run.");
+        }
     }
 
-    @AfterTest
-    public void tearDown() throws Exception {
-        // Tears down the fixture, for example, close a network connection.
-        // This method is called after a test is executed.
-        // Asserting in tearDown() is generally a bad idea.
-        System.setOut(original);
-        istream.close();
-
-        // Print after stdout is restored.
-        System.out.println("\nSolution took " + Long.toString(elapsedTime)  + "ms to run.");
-    }
-
-    @Test
-    public void testSolveProb() throws Exception {
+    public void runTest(int testIdx, Consumer<InputStream> solutionToTest) throws Exception {
         long startTime, stopTime;
+        outContent =  new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        istream = new FileInputStream(INPUT_FILE_PATHS[testIdx]);
+        outputFilePath = Paths.get(OUTPUT_FILE_PATHS[testIdx]);
+
         startTime = System.currentTimeMillis();
-
-        Solution.solveProb(istream);
-
+        solutionToTest.accept(istream);
         stopTime = System.currentTimeMillis();
-        elapsedTime = stopTime - startTime;
+        runningTimes[testIdx] = stopTime - startTime;
 
         String answer = new String(Files.readAllBytes(outputFilePath)).trim();
         String result = outContent.toString().trim();
         answer = answer.replaceAll("\\r", "");  // Actually, there's no CR in answer string- at least not in HackerRank's.
         result = result.replaceAll("\\r", "");  // Remove carrige return from the result
 
-        Assert.assertEquals(result, answer);
+        Assert.assertEquals(result, answer, "Test case #" + (testIdx+1) + " is failed.");
+
+        istream.close();
+        outContent.close();
+
+        System.setOut(original);
     }
 }
