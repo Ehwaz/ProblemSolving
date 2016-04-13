@@ -14,7 +14,6 @@ public class Graph {
 
     public Graph() {
         this.vertices = new HashSet<Vertex>();
-        //this.edges = new HashSet<Edge>();
         adjLists = new HashMap<Vertex, List<Edge>>();
     }
 
@@ -34,8 +33,8 @@ public class Graph {
         Edge newEdge = new Edge(v1, v2, weight);
         vertices.add(v1);
         vertices.add(v2);
-        //edges.add(newEdge);
 
+        // Add in both directions: this class is for undirected graph.
         List<Edge> v1List, v2List;
         if (adjLists.containsKey(v1)) {
             v1List = adjLists.get(v1);
