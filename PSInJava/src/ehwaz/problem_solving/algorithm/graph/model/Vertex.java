@@ -32,7 +32,7 @@ public class Vertex implements Comparable<Vertex> {
 
     @Override
     public String toString() {
-        return Integer.toString(id);
+        return "[" + Integer.toString(id) + "]";
     }
 
     @Override
