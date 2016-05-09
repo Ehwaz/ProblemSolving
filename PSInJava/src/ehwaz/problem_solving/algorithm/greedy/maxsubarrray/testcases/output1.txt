@@ -1,0 +1,2 @@
+MaxVal: 6, Idx: 3 to 6
+MaxVal: 1, Idx: 1 to 1
