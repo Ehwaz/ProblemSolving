@@ -57,6 +57,78 @@ public class BinaryTree {
     public void setLeft(BinaryTree newLeft) { this.left = newLeft; newLeft.setParent(this); }
     public void setRight(BinaryTree newRight) { this.right = newRight; newRight.setParent(this); }
 
+    /* Util functions */
+    public int getHeightRec() {
+        if (this.left == null && this.right == null) {
+            return 1;
+        }
+        int leftDepth = (this.left != null) ? this.left.getHeightRec() : -1;
+        int rightDepth = (this.right != null) ? this.right.getHeightRec() : -1;
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+
+    public int getHeight() {
+        Queue<BinaryTree> queue = new LinkedList<>();
+        queue.add(this);
+
+        int curHeight = 0;
+        while (true) {
+            int nodeNumAtThisLevel = queue.size();
+            if (nodeNumAtThisLevel == 0) {
+                return curHeight;
+            }
+            curHeight++;
+
+            while (nodeNumAtThisLevel > 0) {
+                BinaryTree newNode = queue.poll();
+                if (newNode.left != null) {
+                    queue.add(newNode.left);
+                }
+                if (newNode.right != null) {
+                    queue.add(newNode.right);
+                }
+                nodeNumAtThisLevel--;
+            }
+        }
+    }
+
+    // Ref: http://www.geeksforgeeks.org/diameter-of-a-binary-tree/
+    class HeightValue {
+        int height = 0;
+    }
+    public int getDiametorRecUtil(HeightValue HV) {
+        if (this.left == null && this.right == null) {
+            HV.height = 1;
+            return 1;
+        }
+
+        HeightValue leftHV = new HeightValue();
+        HeightValue rightHV = new HeightValue();
+        if (this.left != null) leftHV.height++;
+        if (this.right != null) rightHV.height++;
+
+        int leftTreeDiameter = (this.left != null) ? this.left.getDiametorRecUtil(leftHV) : -1;
+        int rightTreeDiameter = (this.right != null) ? this.right.getDiametorRecUtil(rightHV) : -1;
+
+        HV.height = Math.max(leftHV.height, rightHV.height) + 1;
+        return Math.max(leftHV.height + rightHV.height + 1, Math.max(leftTreeDiameter, rightTreeDiameter));
+    }
+    public int getDiametorRec() {
+        HeightValue hv = new HeightValue();
+        return getDiametorRecUtil(hv);
+    }
+
+    public int getDiametorRecOn2() {
+        if (this.left == null && this.right == null) { return 1; }
+
+        int leftTreeHeight = (this.left != null) ? this.left.getHeight() : -1;
+        int rightTreeHeight = (this.right != null) ? this.right.getHeight() : -1;
+
+        int leftTreeDiameter = (this.left != null) ? this.left.getDiametorRecOn2() : -1;
+        int rightTreeDiameter = (this.right != null) ? this.right.getDiametorRecOn2() : -1;
+
+        return Math.max(leftTreeHeight + rightTreeHeight + 1, Math.max(leftTreeDiameter, rightTreeDiameter));
+    }
 
     /* Traversal Methods */
 

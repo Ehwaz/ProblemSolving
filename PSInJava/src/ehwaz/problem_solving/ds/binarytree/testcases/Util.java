@@ -6,6 +6,11 @@ import ehwaz.problem_solving.ds.binarytree.BinaryTree;
  * Created by Sangwook on 2016-04-09.
  */
 public class Util {
+    /*
+    1
+    2 3
+    4 5 6 7
+     */
     public static BinaryTree createFullBinaryTree0() {
         BinaryTree root = new BinaryTree(1);
         root.setLeft(new BinaryTree(2));
@@ -19,6 +24,13 @@ public class Util {
         return root;
     }
 
+    /*
+    1
+    2 3
+    4 5 6 7
+    8 9 10 11 12 13 14 15
+    16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+     */
     public static BinaryTree createFullBinaryTree1() {
         BinaryTree root = new BinaryTree(1);
         root.setLeft(new BinaryTree(2));
@@ -72,6 +84,12 @@ public class Util {
         return root;
     }
 
+    /*
+    1
+    2 3
+    _ 5 _ 7
+    _ _ _ _ _ 13 _ _
+     */
     public static BinaryTree createTree3() {
         BinaryTree root = new BinaryTree(1);
 
@@ -86,6 +104,12 @@ public class Util {
         return root;
     }
 
+    /*
+    1
+    2 3
+    _ 5 6 _
+    _ _ 10 _ _ _ _ _
+     */
     public static BinaryTree createTree4() {
         BinaryTree root = new BinaryTree(1);
 
